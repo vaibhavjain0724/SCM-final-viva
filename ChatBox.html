@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --gray-50: #f9fafb;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .chatbox-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            font-family: Arial, sans-serif;
+        }
+
+        .chatbox {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .chatbox-header {
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .chatbox-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .chatbox-messages div {
+            margin-bottom: 10px;
+        }
+
+        .chatbox-messages .user-message {
+            text-align: right;
+            color: var(--gray-900);
+        }
+
+        .chatbox-messages .bot-message {
+            text-align: left;
+            color: var(--gray-600);
+        }
+
+        .chatbox-input {
+            display: flex;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .chatbox-input input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .chatbox-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chatbox-input button:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox-container">
+        <div class="chatbox">
+            <div class="chatbox-header">
+                <h3>Chatbot</h3>
+            </div>
+            <div class="chatbox-messages" id="chatbox-messages"></div>
+            <div class="chatbox-input">
+                <input type="text" id="chatbox-input" placeholder="Type your message..." />
+                <button id="chatbox-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messagesContainer = document.getElementById('chatbox-messages');
+        const inputField = document.getElementById('chatbox-input');
+        const sendButton = document.getElementById('chatbox-send');
+
+        // Predefined bot responses
+        const botReplies = {
+            hello: "Hi there! How can I assist you?",
+            help: "Sure! Let me know what you need help with.",
+            bye: "Goodbye! Have a great day!",
+            default: "I'm sorry, I don't understand that.",
+        };
+
+        function sendMessage() {
+            const userMessage = inputField.value.trim();
+            if (!userMessage) return;
+
+            // Display user message
+            const userMessageElement = document.createElement('div');
+            userMessageElement.textContent = userMessage;
+            userMessageElement.classList.add('user-message');
+            messagesContainer.appendChild(userMessageElement);
+
+            // Bot reply
+            const botReply = botReplies[userMessage.toLowerCase()] || botReplies.default;
+            const botMessageElement = document.createElement('div');
+            botMessageElement.textContent = botReply;
+            botMessageElement.classList.add('bot-message');
+            messagesContainer.appendChild(botMessageElement);
+
+            // Clear input and scroll down
+            inputField.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        inputField.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
